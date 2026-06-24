@@ -1,0 +1,23 @@
+databases:
+  - name: codevector-db
+    plan: free
+    databaseName: codevector
+    user: codevector
+
+services:
+  - type: web
+    name: codevector-products
+    runtime: node
+    plan: free
+    rootDir: .
+    buildCommand: npm install --prefix client && npm install --prefix server && npm run build
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: codevector-db
+          property: connectionString
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "20"

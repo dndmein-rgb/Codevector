@@ -1,0 +1,48 @@
+{
+  "name": "codevector-products-api",
+  "version": "1.0.0",
+  "description": "Production-ready TypeScript backend for browsing 200k products with write-safe, fast keyset pagination",
+  "main": "dist/server.js",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "prisma": {
+    "seed": "tsx scripts/seed.ts"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "prisma generate && tsc -p tsconfig.json",
+    "start": "prisma migrate deploy && node dist/server.js",
+    "postinstall": "prisma generate",
+    "seed": "tsx scripts/seed.ts",
+    "simulate-writes": "tsx scripts/simulate-writes.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src scripts --ext .ts",
+    "db:generate": "npx prisma generate",
+    "db:migrate": "npx prisma migrate dev --name init",
+    "db:deploy": "npx prisma migrate deploy",
+    "db:studio": "npx prisma studio"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.22.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.0.0",
+    "@types/pg": "^8.20.0",
+    "@typescript-eslint/eslint-plugin": "^8.62.0",
+    "@typescript-eslint/parser": "^8.62.0",
+    "eslint": "^10.5.0",
+    "prisma": "^7.8.0",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}

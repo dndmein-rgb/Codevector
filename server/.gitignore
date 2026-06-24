@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+*.log
+.DS_Store
+
+# Prisma generates this locally; not committed since it's environment-specific
+node_modules/.prisma/

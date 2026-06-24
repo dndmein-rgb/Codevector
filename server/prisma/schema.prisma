@@ -1,0 +1,36 @@
+// Prisma schema — single source of truth for the database structure.
+// Run `npm run prisma:migrate` locally to create/update the migration,
+// and `npm run prisma:deploy` in production (Render build step) to apply
+// already-committed migrations without prompting interactively.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Cursor design note (the actual point of this task — see
+/// src/modules/products/products.repository.ts for the query and full
+/// rationale): `id` is a BIGSERIAL-equivalent autoincrement column,
+/// assigned once at insert time and never changed again. That immutability
+/// is what makes "newest first, stable while writes are happening"
+/// possible: new inserts always get a higher id (sorts above wherever a
+/// browsing session's cursor currently is), and edits change `updatedAt`
+/// but never `id`, so an edited row can't jump pages and get
+/// re-shown/skipped.
+model Product {
+  id        BigInt   @id @default(autoincrement())
+  name      String
+  category  String
+  price     Decimal  @db.Decimal(10, 2)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  // Supports: WHERE category = ? AND id < ? ORDER BY id DESC LIMIT ?
+  // i.e. the filtered "newest first within a category" page query, as a
+  // pure index range scan instead of a sequential scan + filter + sort.
+  @@index([category, id(sort: Desc)], name: "idx_products_category_id")
+  @@map("products")
+}
