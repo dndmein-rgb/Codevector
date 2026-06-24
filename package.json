@@ -6,8 +6,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "build:client": "npm run build --prefix client",
-    "build:server": "npm run build --prefix server",
+    "build:client": "npm run build --prefix client --include=dev",
+    "build:server": "npm run build --prefix server --include=dev",
     "build": "npm run build:client && npm run build:server",
     "start": "npm start --prefix server",
     "dev:server": "npm run dev --prefix server",
